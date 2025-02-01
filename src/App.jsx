@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from "./ui/Home";
 import Menu from "./features/menu/Menu";
+import Error from "./ui/Error";
 import { loader as menuLoader } from "./features/menu/loader";
 import Cart from "./features/cart/Cart";
 import CreateOrder from "./features/order/CreateOrder";
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
         path: "/menu",
         element: <Menu />,
         loader: menuLoader,
+        errorElement: <Error />, //best we place it here so that the error page is loaded within the Applayout and where data is being fetched
       },
       {
         path: "/cart",
