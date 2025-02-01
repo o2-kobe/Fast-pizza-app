@@ -4,8 +4,10 @@ import Home from "./ui/Home";
 import Menu from "./features/menu/Menu";
 import Error from "./ui/Error";
 import { loader as menuLoader } from "./features/menu/loader";
+import { loader as orderLoader } from "./features/order/loader";
 import Cart from "./features/cart/Cart";
 import CreateOrder from "./features/order/CreateOrder";
+import { action as createOrderAction } from "./features/order/action";
 import Order from "./features/order/Order";
 import AppLayout from "./ui/AppLayout";
 
@@ -30,10 +32,14 @@ const router = createBrowserRouter([
       {
         path: "/order/new",
         element: <CreateOrder />,
+        action: createOrderAction,
+        errorElement: <Error />, //placing this here too means it is the convention that wherever we can get errors, that's where we put them
       },
       {
         path: "/order/:orderId",
         element: <Order />,
+        loader: orderLoader,
+        errorElement: <Error />, //placing this here too means it is the convention that wherever we can get errors, that's where we put them
       },
     ],
   },

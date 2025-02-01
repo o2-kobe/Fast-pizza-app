@@ -1,4 +1,5 @@
 // import { useState } from "react";
+import { Form, useActionData, useNavigation } from "react-router-dom";
 
 // https://uibakery.io/regex-library/phone-number
 // const isValidPhone = (str) =>
@@ -33,13 +34,16 @@ const fakeCart = [
 function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
   const cart = fakeCart;
-  console.log(cart);
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "loading";
+
+  const formErrors = useActionData(); //we use this action was passed into the Object or the create order when declaring itspath, it it were to be loader, then useLoaderData
 
   return (
     <div>
-      <h2>Ready to order? Let us go!</h2>
+      <h2>Ready to order? Let&#39;s go!</h2>
 
-      <form>
+      <Form method="POST">
         <div>
           <label>First Name</label>
           <input type="text" name="customer" required />
@@ -50,6 +54,7 @@ function CreateOrder() {
           <div>
             <input type="tel" name="phone" required />
           </div>
+          {formErrors?.phone && <p>{formErrors.phone}</p>}
         </div>
 
         <div>
@@ -71,9 +76,13 @@ function CreateOrder() {
         </div>
 
         <div>
-          <button>Order now</button>
+          <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+
+          <button disabled={isSubmitting}>
+            {isSubmitting ? "Placing order..." : "Order now"}
+          </button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 }
