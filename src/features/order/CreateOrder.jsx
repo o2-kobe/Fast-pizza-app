@@ -1,7 +1,10 @@
-// import { useState } from "react";
+import { useState } from "react";
 import { Form, useActionData, useNavigation } from "react-router-dom";
 import Button from "../../ui/Button";
+import EmptyCart from "../../features/cart/EmptyCart";
+import { formatCurrency } from "../../utils//helpers";
 import { useSelector } from "react-redux";
+import { getCart, getTotalCartPrice } from "../cart/cartSlice";
 
 // https://uibakery.io/regex-library/phone-number
 // const isValidPhone = (str) =>
@@ -9,39 +12,21 @@ import { useSelector } from "react-redux";
 //     str
 // );
 
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: "Mediterranean",
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: "Vegetale",
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: "Spinach and Mushroom",
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
-
 function CreateOrder() {
-  // const [withPriority, setWithPriority] = useState(false);
-  const cart = fakeCart;
+  const [withPriority, setWithPriority] = useState(false);
+  const cart = useSelector(getCart);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "loading";
 
   const formErrors = useActionData(); //we use this action was passed into the Object or the create order when declaring itspath, it it were to be loader, then useLoaderData
 
   const username = useSelector((state) => state.user.username);
+
+  const totalCartPrize = useSelector(getTotalCartPrice);
+  const priorityPrice = withPriority ? totalCartPrize * 0.2 : 0;
+  const totalPrize = totalCartPrize + priorityPrice;
+
+  if (!cart.length) return <EmptyCart />;
 
   return (
     <div className="px-4 py-6">
@@ -96,8 +81,8 @@ function CreateOrder() {
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
+            value={withPriority}
+            onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label className="font-medium" htmlFor="priority">
             Want to give your order priority?
@@ -108,7 +93,9 @@ function CreateOrder() {
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
 
           <Button type="primary" disabled={isSubmitting}>
-            {isSubmitting ? "Placing order..." : "Order now"}
+            {isSubmitting
+              ? "Placing order..."
+              : `Order now ${formatCurrency(totalPrize)}`}
           </Button>
         </div>
       </Form>

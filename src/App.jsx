@@ -6,6 +6,7 @@ import Error from "./ui/Error";
 import { loader as menuLoader } from "./features/menu/loader";
 import { loader as orderLoader } from "./features/order/loader";
 import Cart from "./features/cart/Cart";
+import { action as UpdateOrderAction } from "./features/order/updateAction";
 import CreateOrder from "./features/order/CreateOrder";
 import { action as createOrderAction } from "./features/order/action";
 import Order from "./features/order/Order";
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
         path: "/order/:orderId",
         element: <Order />,
         loader: orderLoader,
+        action: UpdateOrderAction,
         errorElement: <Error />, //placing this here too means it is the convention that wherever we can get errors, that's where we put them
       },
     ],
