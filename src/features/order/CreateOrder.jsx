@@ -1,6 +1,7 @@
 // import { useState } from "react";
 import { Form, useActionData, useNavigation } from "react-router-dom";
 import Button from "../../ui/Button";
+import { useSelector } from "react-redux";
 
 // https://uibakery.io/regex-library/phone-number
 // const isValidPhone = (str) =>
@@ -40,6 +41,8 @@ function CreateOrder() {
 
   const formErrors = useActionData(); //we use this action was passed into the Object or the create order when declaring itspath, it it were to be loader, then useLoaderData
 
+  const username = useSelector((state) => state.user.username);
+
   return (
     <div className="px-4 py-6">
       <h2 className="mb-8 text-xl font-semibold">
@@ -52,8 +55,16 @@ function CreateOrder() {
           {/*the flex basis is
           used to allow the element to fill the space it has to in order to
           counter any compressions*/}
-          <input className="input grow" type="text" name="customer" required />
+          <input
+            className="input grow"
+            defaultValue={username}
+            type="text"
+            name="customer"
+            required
+          />
         </div>
+
+        {/* the defaultValue attribute is the go to here because it allows for overwriting of the text inside of the input field */}
 
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
           <label className="sm:basis-40">Phone number</label>
